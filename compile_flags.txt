@@ -1,0 +1,8 @@
+-Wall
+#-std=c++17
+-L/usr/local/lib
+-I/usr/local/include
+-I/usr/include/SDL2
+-I/usr/local/include/SDL2
+-I./UI
+-I./Utils
