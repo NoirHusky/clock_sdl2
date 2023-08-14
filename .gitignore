@@ -1,4 +1,3 @@
 *.o
 game
-gen
-atlas_gen/gfx/*
+a.out

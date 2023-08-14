@@ -1,14 +1,14 @@
 #include "SDL_render.h"
 #include <SDL2/SDL.h>
-#include <stdbool.h>
 #include <math.h>
+#include <stdbool.h>
 
 const char TITLE[] = "The Clock";
 const int WIDTH = 420;
 const int HEIGHT = 420;
 
-SDL_Window* g_window;
-SDL_Renderer* g_renderer;
+SDL_Window *g_window;
+SDL_Renderer *g_renderer;
 bool g_running = false;
 
 /* struct tvector { */
@@ -50,7 +50,6 @@ SDL_FPoint vector_rotate(float x, float y, float angle) {
     return p;
 }
 
-
 void draw_clock() {
     /* SDL_Point points[20]; */
 
@@ -62,9 +61,7 @@ void draw_clock() {
     /* SDL_RenderDrawLines(g_renderer, points, 19); */
 }
 
-void update(float dt) {
-
-}
+void update(float dt) {}
 
 void render() {
     SDL_SetRenderDrawColor(g_renderer, 255, 150, 150, 255);
@@ -74,7 +71,7 @@ void render() {
     SDL_RenderPresent(g_renderer);
 }
 
-void close() {
+void app_close() {
     SDL_DestroyWindow(g_window);
     SDL_DestroyRenderer(g_renderer);
     SDL_Quit();
@@ -82,24 +79,24 @@ void close() {
 
 void handle_events() {
     SDL_Event e;
-    while ( SDL_PollEvent(&e)) {
+    while (SDL_PollEvent(&e)) {
         switch (e.type) {
-            case SDL_QUIT:
-                g_running = false;
-                break;
+        case SDL_QUIT:
+            g_running = false;
+            break;
         }
     }
 }
-bool init(const char* title, int w, int h, bool fullscreen) {
+bool init(const char *title, int w, int h, bool fullscreen) {
     int flags = fullscreen ? SDL_WINDOW_FULLSCREEN : 0;
     SDL_CreateWindowAndRenderer(w, h, flags, &g_window, &g_renderer);
-    if ( !g_window || !g_renderer )  {
+    if (!g_window || !g_renderer) {
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
 }
 
-void die(const char* err) {
+void die(const char *err) {
     printf("ERROR: an error happened -> %s\n", err);
     exit(1);
 }
@@ -110,13 +107,13 @@ int intialization_failed() {
 }
 
 int run() {
-    atexit(close);
+    atexit(app_close);
     g_running = true;
 
     const Uint32 FPS = 1000 / 30;
     float dt = 0;
 
-    while ( g_running ) {
+    while (g_running) {
         Uint32 start = SDL_GetTicks();
 
         update(dt);
@@ -124,12 +121,15 @@ int run() {
         handle_events();
 
         Uint32 frametime = SDL_GetTicks() - start;
-        if ( frametime < FPS ) SDL_Delay(FPS - frametime);
+        if (frametime < FPS)
+            SDL_Delay(FPS - frametime);
         dt = (SDL_GetTicks() - start) / 1000.f;
     }
     return 0;
 }
 
 int main() {
-    return init(TITLE, WIDTH, HEIGHT, false) == EXIT_SUCCESS ? run() : intialization_failed();
+    return init(TITLE, WIDTH, HEIGHT, false) == EXIT_SUCCESS
+               ? run()
+               : intialization_failed();
 }
